@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 from torch import optim
-import lightning as pl
+import pytorch_lightning as pl
 
 class rsvqa_pl(pl.LightningModule):
     def __init__(self, vision_encoder, text_encoder):
