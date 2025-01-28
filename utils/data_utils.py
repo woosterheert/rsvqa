@@ -2,15 +2,16 @@ import os
 import rasterio
 import numpy as np
 import torch
-from torch.utils.data import DataLoader, IterableDataset
+from torch.utils.data import IterableDataset
 
 class RSVQADataset(IterableDataset):
-    def __init__(self, df, train_args, data_dir, tokenizer):
+    def __init__(self, df, train_args, data_dir, tokenizer, add_temporal_dimension):
         self.df = df
         self.means = np.array(train_args["data_mean"]).reshape(-1, 1, 1)
         self.stds = np.array(train_args["data_std"]).reshape(-1, 1, 1)   
         self.data_dir = data_dir
         self.tokenizer = tokenizer
+        self.add_temporal_dimension = add_temporal_dimension
 
     def __iter__(self):
         self.df.sample(frac=1)
@@ -32,6 +33,9 @@ class RSVQADataset(IterableDataset):
 
     def preprocess_image(self, image):
         normalized = image.copy()
-        normalized = np.expand_dims(((image - self.means) / self.stds), axis=1)
+        if self.add_temporal_dimension:
+            normalized = np.expand_dims(((image - self.means) / self.stds), axis=1)
+        else:
+            normalized = (image - self.means) / self.stds
         normalized = torch.from_numpy(normalized).to(torch.float32)
         return normalized
