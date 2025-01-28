@@ -49,3 +49,4 @@ class RSVQADataset(IterableDataset):
         img = reshape_as_image(image.copy())
         pil_img = Image.fromarray(img).convert("RGB")
         normalized = self.rgb_transform(pil_img).unsqueeze(0)
+        return normalized
