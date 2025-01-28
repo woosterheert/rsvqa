@@ -48,5 +48,5 @@ class RSVQADataset(IterableDataset):
     def preprocess_rgb(self, image):
         img = reshape_as_image(image.copy())
         pil_img = Image.fromarray(img).convert("RGB")
-        normalized = self.rgb_transform(pil_img).unsqueeze(0)
+        normalized = self.rgb_transform(pil_img)
         return normalized
