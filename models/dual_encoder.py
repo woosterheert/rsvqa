@@ -4,14 +4,14 @@ from torch import optim
 import pytorch_lightning as pl
 
 class dual_encoder_with_classifier(pl.LightningModule):
-    def __init__(self, vision_encoder, text_encoder, vision_encoder_dim, text_encoder_dim, use_vision_cls_token=False):
+    def __init__(self, vision_encoder, text_encoder, vision_encoder_dim, text_encoder_dim, model_type):
         super().__init__()
 
         self.vision_encoder = vision_encoder
         self.text_encoder = text_encoder
         self.vision_encoder_dim = vision_encoder_dim
         self.text_encoder_dim = text_encoder_dim
-        self.use_vision_cls_token = use_vision_cls_token
+        self.model_type = model_type
 
         for param in self.vision_encoder.parameters():
             param.requires_grad = False
@@ -22,9 +22,12 @@ class dual_encoder_with_classifier(pl.LightningModule):
         self.classification_layer = nn.Sequential(nn.Linear(128, 1), nn.Sigmoid())
 
     def forward(self, normalised_image, text_tokens, attention_mask):
-        img_embedding, _, _ = self.vision_encoder(normalised_image)
-        if self.use_vision_cls_token:
+        if self.model_type == '6d':
+            img_embedding, _, _ = self.vision_encoder(normalised_image)
             img_embedding = img_embedding[:,0,:]
+        elif self.model_type == 'rgb':
+            img_embedding = self.vision_encoder(normalised_image)
+            
         txt_embedding = self.text_encoder(input_ids=text_tokens, attention_mask=attention_mask)
         txt_embedding = txt_embedding.last_hidden_state[:,0,:]
         fused_embedding = torch.cat([img_embedding, txt_embedding], dim=1)
