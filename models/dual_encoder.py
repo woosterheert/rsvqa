@@ -3,6 +3,7 @@ import torch
 from torch import optim
 import pytorch_lightning as pl
 
+
 class dual_encoder_with_classifier(pl.LightningModule):
     def __init__(self, vision_encoder, text_encoder, vision_encoder_dim, text_encoder_dim, model_type):
         super().__init__()
@@ -27,7 +28,7 @@ class dual_encoder_with_classifier(pl.LightningModule):
             img_embedding = img_embedding[:,0,:]
         elif self.model_type == 'rgb':
             img_embedding = self.vision_encoder(normalised_image)
-            
+
         txt_embedding = self.text_encoder(input_ids=text_tokens, attention_mask=attention_mask)
         txt_embedding = txt_embedding.last_hidden_state[:,0,:]
         fused_embedding = torch.cat([img_embedding, txt_embedding], dim=1)
@@ -52,5 +53,5 @@ class dual_encoder_with_classifier(pl.LightningModule):
         self.log('acc', acc, prog_bar=True)
     
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = optim.Adam(self.parameters(), lr=1e-4)
         return optimizer
