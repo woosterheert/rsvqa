@@ -1,5 +1,5 @@
 import sys
-sys.path.insert('/home/wouter/rsvqa')
+sys.path.insert(1, '/home/wouter/rsvqa')
 
 from utils.dual_encoder_dataset import RSVQADataset
 from transformers import BertModel, BertTokenizer
