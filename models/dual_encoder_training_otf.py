@@ -17,8 +17,8 @@ df = pd.read_csv('/home/wouter/data/questions_and_answers_binary.csv', index_col
 df_train = df.query("split == 'train'").sample(frac=0.1)
 df_val = df.query("split == 'validation'").sample(frac=0.005)
 
-weights_path = "/home/wouter/data/ou-genai-data/Prithvi_EO_V1_100M.pt"
-model_cfg_path = "/home/wouter/data/ou-genai-data/config.yaml"
+weights_path = "/home/wouter/data/Prithvi_EO_V1_100M.pt"
+model_cfg_path = "/home/wouter/data/config.yaml"
 with open(model_cfg_path) as f:
     model_config = yaml.safe_load(f)
 
