@@ -7,7 +7,7 @@ from torchvision import transforms
 from rasterio.plot import reshape_as_image
 from PIL import Image
 
-class RSVQADataset(IterableDataset):
+class RSVQAIterableDataset(IterableDataset):
     def __init__(self, df, train_args, data_dir, tokenizer, model_type):
         self.df = df
         self.means = np.array(train_args["data_mean"]).reshape(-1, 1, 1)
