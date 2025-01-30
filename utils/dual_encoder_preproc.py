@@ -67,12 +67,16 @@ if __name__ == "__main__" :
     
     df = pd.read_csv('questions_and_answers_binary.csv', index_col=0)
     df_train = df.query("split == 'train'").sample(frac=0.01)
+    df_val = df.query("split == 'validation'").sample(frac=0.005)
+
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     with open("config.yaml") as f:
         model_config = yaml.safe_load(f)
     train_args = model_config["train_params"]
 
     # train_proc = RSVQADataProcessor(df_train, train_args, 'rgb_data', 'resnet_bert_small', tokenizer, "rgb")
-    train_proc = RSVQADataProcessor(df_train, train_args, '6d_data', 'prithvi_bert_small', tokenizer, "6d")
-    
+    # train_proc = RSVQADataProcessor(df_train, train_args, '6d_data', 'prithvi_bert_small', tokenizer, "6d")
+    train_proc = RSVQADataProcessor(df_val, train_args, 'rgb_data', 'resnet_bert_small_validation', tokenizer, "rgb")
+    train_proc.process()
+    train_proc = RSVQADataProcessor(df_val, train_args, '6d_data', 'prithvi_bert_small_validation', tokenizer, "6d")
     train_proc.process()
