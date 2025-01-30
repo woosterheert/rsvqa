@@ -16,8 +16,8 @@ bert_encoder = BertModel.from_pretrained('bert-base-uncased')
 train_ds = RSVQADataset('/home/wouter/data/resnet_bert_small', frac=0.1)
 val_ds = RSVQADataset('/home/wouter/data/resnet_bert_small_validation', frac=0.05)
 
-train_dataloader = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
-val_dataloader = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=4, pin_memory=True)
+train_dataloader = DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=4, pin_memory=True)
+val_dataloader = DataLoader(val_ds, batch_size=32, shuffle=False, num_workers=4, pin_memory=True)
 
 baseline_model = dual_encoder_with_classifier(resnet_encoder, bert_encoder, 1000, 768, "rgb")
 
