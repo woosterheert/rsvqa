@@ -10,8 +10,8 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 resnet_encoder = resnet50(pretrained=True)
 bert_encoder = BertModel.from_pretrained('bert-base-uncased')
 
-train_ds = RSVQADataset('data/resnet_bert_small')
-val_ds = RSVQADataset('data/resnet_bert_small_validation')
+train_ds = RSVQADataset('/home/wouter/data/resnet_bert_small')
+val_ds = RSVQADataset('/home/wouter/data/resnet_bert_small_validation')
 
 train_dataloader = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
 val_dataloader = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=4, pin_memory=True)
