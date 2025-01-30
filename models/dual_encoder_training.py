@@ -1,7 +1,7 @@
-from utils.dual_encoder_dataset import RSVQADataset
+from ..utils.dual_encoder_dataset import RSVQADataset
 from transformers import BertModel, BertTokenizer
 from torch.utils.data import DataLoader
-from models.dual_encoder import dual_encoder_with_classifier
+from ..models.dual_encoder import dual_encoder_with_classifier
 import pytorch_lightning as pl
 from torchvision.models import resnet50
 
