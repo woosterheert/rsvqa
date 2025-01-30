@@ -39,8 +39,8 @@ bert_encoder = BertModel.from_pretrained('bert-base-uncased')
 train_ds = RSVQAIterableDataset(df_train, train_args, '/mnt/ou-genai-data/6d_data', tokenizer, "6d")
 val_ds = RSVQAIterableDataset(df_val, train_args, '/mnt/ou-genai-data/6d_data', tokenizer, "6d")
 
-train_dataloader = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
-val_dataloader = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=4, pin_memory=True)
+train_dataloader = DataLoader(train_ds, batch_size=8, num_workers=4, pin_memory=True)
+val_dataloader = DataLoader(val_ds, batch_size=8, num_workers=4, pin_memory=True)
 
 baseline_model_with_prithvi = dual_encoder_with_classifier(prithvi_encoder, bert_encoder, 768, 768, "6d")
 
