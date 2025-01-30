@@ -30,12 +30,12 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 bert_encoder = BertModel.from_pretrained('bert-base-uncased')
 
 train_ds = RSVQADataset('/home/wouter/data/prithvi_bert_small')
-val_ds = RSVQADataset('/home/wouter/data/prithvi_bert_small_validation')
+val_ds = RSVQADataset('/home/wouter/data/prithvi_bert_small_validation', frac=0.1)
 
 train_dataloader = DataLoader(train_ds, batch_size=4, shuffle=True, num_workers=4, pin_memory=True)
 val_dataloader = DataLoader(val_ds, batch_size=4, shuffle=False, num_workers=4, pin_memory=True)
 
 baseline_model_with_prithvi = dual_encoder_with_classifier(prithvi_encoder, bert_encoder, 768, 768, "6d")
 
-trainer = pl.Trainer(max_epochs=1)
+trainer = pl.Trainer(max_epochs=5)
 trainer.fit(model=baseline_model_with_prithvi, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
