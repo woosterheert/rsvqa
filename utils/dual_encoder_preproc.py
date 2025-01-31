@@ -78,7 +78,7 @@ if __name__ == "__main__" :
     df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    with open("/home/wouter/daa/config.yaml") as f:
+    with open("/home/wouter/data/config.yaml") as f:
         model_config = yaml.safe_load(f)
     train_args = model_config["train_params"]
 
