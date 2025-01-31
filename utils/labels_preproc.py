@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/home/wouter/rsvqa')
+
 import pandas as pd
 import random
 from external.generate_labels import ask_questions
