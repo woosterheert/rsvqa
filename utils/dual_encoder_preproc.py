@@ -65,7 +65,7 @@ class RSVQADataProcessor:
 
 if __name__ == "__main__" :
     
-    df = pd.read_csv('/home/wouter/data/questions_and_answers_binary.csv', index_col=0)
+    df = pd.read_csv('/home/wouter/data/questions_and_answers_binary_new.csv', index_col=0)
     
     df_train = df.query("split == 'train'")
     df_train_pos = df_train.query('binary_answer==1').sample(5000)  
@@ -73,8 +73,8 @@ if __name__ == "__main__" :
     df_train_balanced = pd.concat([df_train_pos, df_train_neg]).sample(frac=1)
 
     df_val = df.query("split == 'validation'")
-    df_val_pos = df_val.query('binary_answer==1').sample(500)  
-    df_val_neg = df_val.query('binary_answer==0').sample(500)
+    df_val_pos = df_val.query('binary_answer==1').sample(100)  
+    df_val_neg = df_val.query('binary_answer==0').sample(100)
     df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')

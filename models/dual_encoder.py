@@ -53,5 +53,5 @@ class dual_encoder_with_classifier(pl.LightningModule):
         self.log('acc', acc, prog_bar=True)
     
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=1e-4)
+        optimizer = optim.Adam(self.parameters(), lr=1e-3)
         return optimizer
