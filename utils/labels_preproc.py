@@ -10,7 +10,7 @@ import tqdm
 class QuestionGenerator:
     def __init__(self, dir_data_in, presence_only=False, nr_questions_per_img=10):
         self.dir_data_in = dir_data_in 
-        self.metadata = pd.read_parquet('metadata.parquet')
+        self.metadata = pd.read_parquet('/home/wouter/data/metadata.parquet')
         self.tile_names = [tile for tile in os.listdir(self.dir_data_in) 
                            if os.path.isdir(os.path.join(self.dir_data_in, tile))]
         self.data = []
