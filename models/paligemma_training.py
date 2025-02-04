@@ -20,20 +20,18 @@ def collate_fn(examples):
     tokens = tokens.to(torch.bfloat16).to(device)
     return tokens
 
-def data_gen(df, data_dir):
+def create_dataset(df, data_dir):
+    data = []
     for idx, row in tqdm.tqdm(df.iterrows()):
-
         path = os.path.join(data_dir, row.tile_name, row.patch_name)
         with rasterio.open(path) as src:
             image = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear)
         
-        yield {
-            'image': Image.fromarray(reshape_as_image(image)).convert("RGB"),
-            'question': row.question,
-            'answer': row.answer
-        }
-
-
+        data.append({"image": Image.fromarray(reshape_as_image(image)).convert("RGB"),
+                     "question": row.question,
+                     "answer": row.answer})
+    dataset = Dataset.from_list(data)
+    return dataset
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = PaliGemmaForConditionalGeneration.from_pretrained("google/paligemma-3b-pt-224", torch_dtype=torch.bfloat16).to(device)
@@ -76,8 +74,8 @@ df_val_pos = df_val.query('binary_answer==1').sample(100)
 df_val_neg = df_val.query('binary_answer==0').sample(100)
 df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
-train_ds = Dataset.from_generator(data_gen, gen_kwargs={"df": df_train_balanced, "data_dir": '/home/wouter/data/rgb_data'})
-val_ds = Dataset.from_generator(data_gen, gen_kwargs={"df": df_val_balanced, "data_dir": '/home/wouter/data/rgb_data'})
+train_ds = create_dataset(df_train_balanced, '/home/wouter/data/rgb_data')
+val_ds = create_dataset(df_val_balanced, '/home/wouter/data/rgb_data')
 
 trainer = Trainer(
         model=model,
