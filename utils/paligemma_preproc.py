@@ -14,7 +14,7 @@ def data_gen(df, data_dir):
             image = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear)
         
         yield {
-            'image': Image.fromarray(image).convert("RGB"),
+            'image': Image.fromarray(reshape_as_image(image)).convert("RGB"),
             'question': row.question,
             'answer': row.answer
         }
