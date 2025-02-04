@@ -48,7 +48,7 @@ df_val_neg = df_val.query('binary_answer==0').sample(100)
 df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
 train_ds = create_dataset(df_train_balanced, '/home/wouter/data/rgb_data')
-val_ds = create_dataset(df_val_balanced, 'home/wouter/data/rgb_data')
+val_ds = create_dataset(df_val_balanced, '/home/wouter/data/rgb_data')
 
 train_ds.save_to_disk('/home/wouter/data/paligemma_train')
 val_ds.save_to_disk('/home/wouter/data/paligemma_val')
