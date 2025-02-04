@@ -3,9 +3,13 @@ sys.path.insert(1, '/home/wouter/rsvqa')
 
 import torch
 from transformers import PaliGemmaForConditionalGeneration, PaliGemmaProcessor, TrainingArguments, Trainer
-from datasets import load_from_disk
-from utils.paligemma_preproc import create_dataset
 import pandas as pd
+import rasterio
+import tqdm
+import os
+from PIL import Image
+from rasterio.plot import reshape_as_image
+from datasets import Dataset
 
 def collate_fn(examples):
     texts = ["answer " + example["question"] for example in examples]
@@ -15,6 +19,20 @@ def collate_fn(examples):
                     return_tensors="pt", padding="longest")
     tokens = tokens.to(torch.bfloat16).to(device)
     return tokens
+
+def data_gen(df, data_dir):
+    for idx, row in tqdm.tqdm(df.iterrows()):
+
+        path = os.path.join(data_dir, row.tile_name, row.patch_name)
+        with rasterio.open(path) as src:
+            image = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear)
+        
+        yield {
+            'image': Image.fromarray(reshape_as_image(image)).convert("RGB"),
+            'question': row.question,
+            'answer': row.answer
+        }
+
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -58,8 +76,8 @@ df_val_pos = df_val.query('binary_answer==1').sample(100)
 df_val_neg = df_val.query('binary_answer==0').sample(100)
 df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
-train_ds = create_dataset(df_train_balanced, '/home/wouter/data/rgb_data')
-val_ds = create_dataset(df_val_balanced, '/home/wouter/data/rgb_data')
+train_ds = Dataset.from_generator(data_gen, gen_kwargs={"df": df_train_balanced, "data_dir": '/home/wouter/data/rgb_data'})
+val_ds = Dataset.from_generator(data_gen, gen_kwargs={"df": df_val_balanced, "data_dir": '/home/wouter/data/rgb_data'})
 
 trainer = Trainer(
         model=model,
