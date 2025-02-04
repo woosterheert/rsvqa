@@ -28,26 +28,30 @@ class RSVQADataProcessor:
         print('start processing')
         for idx, row in tqdm.tqdm(self.df.iterrows()):
 
-            path = os.path.join(self.data_dir, row.tile_name, row.patch_name)
-            with rasterio.open(path) as src:
-                img = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear)
-            
-            if self.model_type == '6d':
-                normalized_img = self.preprocess_6d(img)
-            elif self.model_type == 'rgb':
-                normalized_img = self.preprocess_rgb(img)
-            
-            tokens = self.tokenizer(row.question, padding="max_length", truncation=True, max_length=128, return_tensors="pt")
-            input_ids = tokens['input_ids'].squeeze(0)
-            attention_mask = tokens['attention_mask'].squeeze(0)
-            label = torch.tensor(np.expand_dims(np.array(row.binary_answer), axis=0), dtype=torch.float32)
+            try:
+                path = os.path.join(self.data_dir, row.tile_name, row.patch_name)
+                with rasterio.open(path) as src:
+                    img = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear)
+                
+                if self.model_type == '6d':
+                    normalized_img = self.preprocess_6d(img)
+                elif self.model_type == 'rgb':
+                    normalized_img = self.preprocess_rgb(img)
+                
+                tokens = self.tokenizer(row.question, padding="max_length", truncation=True, max_length=128, return_tensors="pt")
+                input_ids = tokens['input_ids'].squeeze(0)
+                attention_mask = tokens['attention_mask'].squeeze(0)
+                label = torch.tensor(np.expand_dims(np.array(row.binary_answer), axis=0), dtype=torch.float32)
 
-            unique_id = str(uuid.uuid4())
-            save_path = os.path.join(self.dir_out, f"{unique_id}.pt")
-            torch.save({"image": normalized_img, 
-                        "input_ids": input_ids, 
-                        "attention_mask": attention_mask,
-                        "label": label}, save_path)
+                unique_id = str(uuid.uuid4())
+                save_path = os.path.join(self.dir_out, f"{unique_id}.pt")
+                torch.save({"image": normalized_img, 
+                            "input_ids": input_ids, 
+                            "attention_mask": attention_mask,
+                            "label": label}, save_path)
+            except:
+                print(f'did not succeed processing {path}')
+
 
 
     def preprocess_6d(self, image):
