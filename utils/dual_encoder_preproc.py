@@ -68,13 +68,13 @@ if __name__ == "__main__" :
     df = pd.read_csv('/home/wouter/data/questions_and_answers_binary_new.csv', index_col=0)
     
     df_train = df.query("split == 'train'")
-    df_train_pos = df_train.query('binary_answer==1').sample(5000)  
-    df_train_neg = df_train.query('binary_answer==0').sample(5000)
+    df_train_pos = df_train.query('binary_answer==1').sample(25000)  
+    df_train_neg = df_train.query('binary_answer==0').sample(25000)
     df_train_balanced = pd.concat([df_train_pos, df_train_neg]).sample(frac=1)
 
     df_val = df.query("split == 'validation'")
-    df_val_pos = df_val.query('binary_answer==1').sample(100)  
-    df_val_neg = df_val.query('binary_answer==0').sample(100)
+    df_val_pos = df_val.query('binary_answer==1').sample(500)  
+    df_val_neg = df_val.query('binary_answer==0').sample(500)
     df_val_balanced = pd.concat([df_val_pos, df_val_neg]).sample(frac=1)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -82,11 +82,11 @@ if __name__ == "__main__" :
         model_config = yaml.safe_load(f)
     train_args = model_config["train_params"]
 
-    train_proc = RSVQADataProcessor(df_train_balanced, train_args, '/home/wouter/data/rgb_data', '/home/wouter/data/resnet_bert/training', tokenizer, "rgb")
+    train_proc = RSVQADataProcessor(df_train_balanced, train_args, '/home/wouter/data/rgb_data', '/home/wouter/data/resnet_bert/training_large', tokenizer, "rgb")
     train_proc.process()
-    train_proc = RSVQADataProcessor(df_train_balanced, train_args, '/home/wouter/data/6d_data', '/home/wouter/data/prithvi_bert/training', tokenizer, "6d")
+    train_proc = RSVQADataProcessor(df_train_balanced, train_args, '/home/wouter/data/6d_data', '/home/wouter/data/prithvi_bert/training_large', tokenizer, "6d")
     train_proc.process()
-    train_proc = RSVQADataProcessor(df_val_balanced, train_args, '/home/wouter/data/rgb_data', '/home/wouter/data/resnet_bert/validation', tokenizer, "rgb")
+    train_proc = RSVQADataProcessor(df_val_balanced, train_args, '/home/wouter/data/rgb_data', '/home/wouter/data/resnet_bert/validation_large', tokenizer, "rgb")
     train_proc.process()
-    train_proc = RSVQADataProcessor(df_val_balanced, train_args, '/home/wouter/data/6d_data', '/home/wouter/data/prithvi_bert/validation', tokenizer, "6d")
+    train_proc = RSVQADataProcessor(df_val_balanced, train_args, '/home/wouter/data/6d_data', '/home/wouter/data/prithvi_bert/validation_large', tokenizer, "6d")
     train_proc.process()
