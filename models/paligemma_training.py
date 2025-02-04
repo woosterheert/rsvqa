@@ -1,7 +1,6 @@
 import torch
-from transformers import PaliGemmaForConditionalGeneration
-from transformers import TrainingArguments
-from transformers import Trainer
+from transformers import PaliGemmaForConditionalGeneration, PaliGemmaProcessor, TrainingArguments, Trainer
+from datasets import load_from_disk
 
 def collate_fn(examples):
     texts = ["answer " + example["question"] for example in examples]
@@ -14,7 +13,8 @@ def collate_fn(examples):
 
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model = PaliGemmaForConditionalGeneration.from_pretrained(model_id, torch_dtype=torch.bfloat16).to(device)
+model = PaliGemmaForConditionalGeneration.from_pretrained("google/paligemma-3b-pt-224", torch_dtype=torch.bfloat16).to(device)
+processor = PaliGemmaProcessor.from_pretrained("google/paligemma-3b-pt-224")
 args=TrainingArguments(
             num_train_epochs=1,
             remove_unused_columns=False,
@@ -40,6 +40,9 @@ for param in model.vision_tower.parameters():
 
 for param in model.multi_modal_projector.parameters():
     param.requires_grad = True
+
+train_ds = load_from_disk('/home/wouter/data/paligemma_train')
+val_ds = load_from_disk('/home/wouter/data/paligemma_val')
 
 trainer = Trainer(
         model=model,
