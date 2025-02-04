@@ -19,7 +19,7 @@ def create_dataset(df, data_dir):
 def load_image(example):
     with rasterio.open(example["image"]) as src:
         image = src.read(out_shape=(src.count, 224, 224), resampling=rasterio.enums.Resampling.bilinear) 
-    example["image"] = Image.fromarray(reshape_as_image(image)).convert("RGB")
+    example["image"] = Image.fromarray(reshape_as_image(image))
     return example
 
 # def data_gen(df, data_dir):
