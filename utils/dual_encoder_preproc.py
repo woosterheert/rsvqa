@@ -43,7 +43,7 @@ class RSVQADataProcessor:
             label = torch.tensor(np.expand_dims(np.array(row.binary_answer), axis=0), dtype=torch.float32)
 
             unique_id = str(uuid.uuid4())
-            save_path = os.path.join(self.dir_out, f"{unique_id}.pt")
+            save_path = os.path.join(self.dir_out, f"{idx}.pt")
             torch.save({"image": normalized_img, 
                         "input_ids": input_ids, 
                         "attention_mask": attention_mask,
