@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/home/wouter/rsvqa')
+
 from transformers import BertModel
 from rsvqa.models.dual_encoder import dual_encoder_with_classifier
 from torchvision.models import resnet50
