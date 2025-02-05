@@ -11,8 +11,8 @@ import tqdm
 def load_data(file_path):
     data = torch.load(file_path)
     image = data['image'].unsqueeze(0)
-    input_ids = data['input_ids']
-    attention_mask = data['attention_mask']
+    input_ids = data['input_ids'].unsqueeze(0)
+    attention_mask = data['attention_mask'].unsqueeze(0)
     label = data['label']
     return image, input_ids, attention_mask, label
 
