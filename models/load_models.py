@@ -6,14 +6,21 @@ from rsvqa.external.prithvi_mae import PrithviViT
 import torch
 import yaml
 
-def load_resnet_bert():
+def load_resnet_bert(ckpt=None):
     resnet_encoder = resnet50(pretrained=True)
     bert_encoder = BertModel.from_pretrained('bert-base-uncased')
-    model = dual_encoder_with_classifier(resnet_encoder, bert_encoder, 1000, 768, "rgb")
-
+    if ckpt is None:
+        model = dual_encoder_with_classifier(resnet_encoder, bert_encoder, 1000, 768, "rgb")
+    else:
+        model = dual_encoder_with_classifier.load_from_checkpoint(ckpt,
+                                                                  vision_encoder=resnet_encoder, 
+                                                                  text_encoder=bert_encoder, 
+                                                                  vision_encoder_dim=1000, 
+                                                                  text_encoder_dim=768, 
+                                                                  model_type='rgb')
     return model
 
-def load_prithvi_bert():
+def load_prithvi_bert(ckpt=None):
     weights_path = "/home/wouter/data/Prithvi_EO_V1_100M.pt"
     model_cfg_path = "/home/wouter/data/config.yaml"
     with open(model_cfg_path) as f:
@@ -31,6 +38,14 @@ def load_prithvi_bert():
 
     bert_encoder = BertModel.from_pretrained('bert-base-uncased')
     
-    model = dual_encoder_with_classifier(prithvi_encoder, bert_encoder, 768, 768, "6d")
+    if ckpt is None:
+        model = dual_encoder_with_classifier(prithvi_encoder, bert_encoder, 768, 768, "6d")
+    else:
+        model = dual_encoder_with_classifier.load_from_checkpoint(ckpt,
+                                                                  vision_encoder=prithvi_encoder, 
+                                                                  text_encoder=bert_encoder, 
+                                                                  vision_encoder_dim=768, 
+                                                                  text_encoder_dim=768, 
+                                                                  model_type='6d')
 
     return model
