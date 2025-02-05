@@ -1,3 +1,5 @@
+# This code was adapted from https://github.com/syvlo/RSVQAxBEN
+
 CLC_hierarchy = {'artificial areas':
                  {'urban fabric':['continuous urban fabric', 'discontinuous urban fabric'],
                   'industrial, commercial, and transport units':['industrial or commercial units', 'road and rail networks and associated land', 'port areas', 'airports'],
