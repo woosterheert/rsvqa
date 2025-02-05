@@ -36,13 +36,13 @@ if __name__ == "__main__" :
         image, input_ids, attention_mask, label = load_data(resnet_data_path)
 
         with torch.no_grad():
-            resnet_predictions.append(resnet_bert_model(image, input_ids, attention_mask).numpy()[0])
+            resnet_predictions.append(resnet_bert_model(image, input_ids, attention_mask).numpy()[0][0])
 
         prithvi_data_path = os.path.join('/home/wouter/data/app/prithvi_bert', str(df.iloc[i].idx)+'.pt') 
         image, input_ids, attention_mask, label = load_data(prithvi_data_path)
         
         with torch.no_grad():
-            prithvi_predictions.append(prithvi_bert_model(image, input_ids, attention_mask).numpy()[0])
+            prithvi_predictions.append(prithvi_bert_model(image, input_ids, attention_mask).numpy()[0][0])
         
     df['resnet_prediction'] = resnet_predictions
     df['prithvi_prediction'] = prithvi_predictions
