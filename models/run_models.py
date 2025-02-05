@@ -17,8 +17,8 @@ def load_data(file_path):
 
 if __name__ == "__main__" :
 
-    resnet_bert_ckpt = "/home/wouter/rsvqa/lightning_logs/version_11/checkpoints/'epoch=9-step=6250.ckpt'"
-    prithvi_bert_ckpt = "/home/wouter/rsvqa/lightning_logs/version_12/checkpoints/'epoch=9-step=6250.ckpt'"
+    resnet_bert_ckpt = "/home/wouter/rsvqa/lightning_logs/version_11/checkpoints/epoch=9-step=6250.ckpt"
+    prithvi_bert_ckpt = "/home/wouter/rsvqa/lightning_logs/version_12/checkpoints/epoch=9-step=6250.ckpt"
     resnet_bert_model = load_resnet_bert(resnet_bert_ckpt)
     resnet_bert_model.eval()
     prithvi_bert_model = load_prithvi_bert(prithvi_bert_ckpt)
