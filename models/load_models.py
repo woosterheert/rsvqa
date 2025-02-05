@@ -2,10 +2,10 @@ import sys
 sys.path.insert(1, '/home/wouter/rsvqa')
 
 from transformers import BertModel
-from rsvqa.models.dual_encoder import dual_encoder_with_classifier
+from models.dual_encoder import dual_encoder_with_classifier
 from torchvision.models import resnet50
 import pytorch_lightning as pl
-from rsvqa.external.prithvi_mae import PrithviViT
+from external.prithvi_mae import PrithviViT
 import torch
 import yaml
 
