@@ -6,6 +6,7 @@ from models.load_models import load_prithvi_bert, load_resnet_bert
 from datasets import load_from_disk
 import os
 import torch
+import tqdm
 
 def load_data(file_path):
     data = torch.load(file_path)
@@ -30,14 +31,14 @@ if __name__ == "__main__" :
     resnet_predictions = []
     prithvi_predictions = []
 
-    for i in range(20):
-        resnet_data_path = os.path.join('/home/wouter/data/app/resnet_bert', df.iloc[i].idx) 
+    for i in tqdm.tqdm(range(20)):
+        resnet_data_path = os.path.join('/home/wouter/data/app/resnet_bert', str(df.iloc[i].idx)+'.pt') 
         image, input_ids, attention_mask, label = load_data(resnet_data_path)
 
         with torch.no_grad():
             resnet_predictions.append(resnet_bert_model(image, input_ids, attention_mask))
 
-        prithvi_data_path = os.path.join('/home/wouter/data/app/prithvi_bert', df.iloc[i].idx) 
+        prithvi_data_path = os.path.join('/home/wouter/data/app/prithvi_bert', str(df.iloc[i].idx)+'.pt') 
         image, input_ids, attention_mask, label = load_data(prithvi_data_path)
         
         with torch.no_grad():
