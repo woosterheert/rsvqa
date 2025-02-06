@@ -10,4 +10,4 @@ In order to reproduce the results:
 - Use BigEarthNetPreProcessing from utils to create 3D and 6D equivalents of the data
 - Generate questions and answers for each of the images using QuestionGenerator 
 - Use model specific preprocessers from utils to prepare the data for each of our models
-- Use the provided training processes to construct, train and evaluate the moels 
+- Use the provided training processes to construct, train and evaluate the models 
