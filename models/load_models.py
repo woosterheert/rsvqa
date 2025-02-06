@@ -8,6 +8,7 @@ import pytorch_lightning as pl
 from external.prithvi_mae import PrithviViT
 import torch
 import yaml
+import os
 
 def load_resnet_bert(ckpt=None):
     resnet_encoder = resnet50(pretrained=True)
@@ -23,9 +24,9 @@ def load_resnet_bert(ckpt=None):
                                                                   model_type='rgb')
     return model
 
-def load_prithvi_bert(ckpt=None):
-    weights_path = "/home/wouter/data/Prithvi_EO_V1_100M.pt"
-    model_cfg_path = "/home/wouter/data/config.yaml"
+def load_prithvi_bert(datadir, ckpt=None):
+    weights_path = os.path.join(datadir, "Prithvi_EO_V1_100M.pt")
+    model_cfg_path = os.path.join(datadir, "config.yaml")
     with open(model_cfg_path) as f:
         model_config = yaml.safe_load(f)
 

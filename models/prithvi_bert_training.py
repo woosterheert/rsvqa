@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 from models.load_models import load_prithvi_bert
 
-prithvi_bert_classifier = load_prithvi_bert()
+prithvi_bert_classifier = load_prithvi_bert('/home/wouter/data')
 
 train_ds = RSVQADataset('/home/wouter/data/prithvi_bert/training')
 val_ds = RSVQADataset('/home/wouter/data/prithvi_bert/validation')
